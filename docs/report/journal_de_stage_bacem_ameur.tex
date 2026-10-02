@@ -1,0 +1,422 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{geometry}
+\geometry{top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm, headheight=15pt}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{microtype}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=blue,
+    pdftitle={Journal de Stage -- CHRONO\_01},
+    pdfauthor={Becem Ameur},
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Journal de Stage -- Becem Ameur}
+\fancyhead[R]{ENIM -- 2025/2026}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\onehalfspacing
+
+\definecolor{semaine1}{rgb}{0.85,0.93,1.0}
+\definecolor{semaine2}{rgb}{0.85,1.0,0.88}
+\definecolor{semaine3}{rgb}{1.0,0.96,0.82}
+\definecolor{semaine4}{rgb}{0.96,0.85,1.0}
+\definecolor{semaine5}{rgb}{1.0,0.88,0.85}
+\definecolor{titlebg}{rgb}{0.18,0.36,0.60}
+
+% ==============================================================================
+\begin{document}
+% ==============================================================================
+
+% ----- Titre ------------------------------------------------------------------
+\begin{titlepage}
+    \begin{center}
+        \vspace*{1.5cm}
+        {\Large \textbf{École Nationale d'Ingénieurs de Monastir (ENIM)}}\\[0.3cm]
+        {\large Université de Monastir -- Tunisie}\\[1.5cm]
+        \rule{\linewidth}{1.2pt}\\[0.4cm]
+        {\huge \textbf{Journal de Stage}}\\[0.3cm]
+        \rule{\linewidth}{1.2pt}\\[1.0cm]
+        {\LARGE \textbf{Projet CHRONO\_01}}\\[0.4cm]
+        {\large Chronomètre géant à afficheurs 7 segments 24\,V\\
+        avec contrôle WiFi et GSM}\\[2.0cm]
+
+        \begin{tabular}{ll}
+            \textbf{Stagiaire :}    & Becem Ameur \\[0.2cm]
+            \textbf{Spécialité :}   & Génie Électrique, 3\textsuperscript{ème} année \\[0.2cm]
+            \textbf{Établissement :}& ENIM, Université de Monastir \\[0.2cm]
+            \textbf{Durée :}        & 30 jours (6 semaines) \\[0.2cm]
+            \textbf{Année :}        & 2025 -- 2026 \\
+        \end{tabular}
+
+        \vfill
+        \rule{\linewidth}{0.6pt}\\[0.2cm]
+        {\small Document réservé à l'usage académique -- ENIM 2026}
+    \end{center}
+\end{titlepage}
+
+\newpage
+\tableofcontents
+\newpage
+
+% ==============================================================================
+\section*{Introduction}
+\addcontentsline{toc}{section}{Introduction}
+% ==============================================================================
+
+Ce journal retrace toutes les activités que j'ai réalisées pendant mon stage de 30 jours sur le projet \textbf{CHRONO\_01}. L'objectif de ce projet était de concevoir et de fabriquer un chronomètre géant à afficheurs 7 segments alimentés en 24\,V, avec un système de contrôle sans fil (WiFi et GSM).
+
+J'ai organisé mon travail en cinq grandes semaines, en commençant par la recherche et la planification, puis en passant à la conception électronique, à la réalisation du circuit imprimé (PCB), à la programmation, et enfin aux tests et à la mise en boîtier.
+
+\bigskip
+\noindent\textbf{Découpage général du stage :}
+\begin{itemize}
+    \item \textbf{Semaine 1 (Jours 1--6) :} Recherche, analyse du besoin et choix des composants
+    \item \textbf{Semaine 2 (Jours 7--12) :} Conception du schéma électrique sous KiCad 10
+    \item \textbf{Semaine 3 (Jours 13--18) :} Routage du PCB et préparation des fichiers de fabrication
+    \item \textbf{Semaine 4 (Jours 19--24) :} Programmation du firmware et interface web
+    \item \textbf{Semaine 5--6 (Jours 25--30) :} Assemblage mécanique, tests finaux et documentation
+\end{itemize}
+
+\newpage
+
+% ==============================================================================
+\section{Semaine 1 -- Recherche et planification (Jours 1 à 6)}
+% ==============================================================================
+
+\colorbox{semaine1}{\parbox{\linewidth}{\centering\textbf{Objectif : Comprendre le projet, choisir les composants et préparer le cahier des charges}}}
+
+\bigskip
+
+\subsection*{Jour 1 -- Présentation et analyse du projet}
+\begin{itemize}
+    \item Lecture des informations disponibles sur les afficheurs 7 segments de grande taille.
+    \item Dessin d'un premier schéma de principe à la main : 6 chiffres, chacun avec 7 segments = 42 LED.
+    \item Définition des besoins principaux : alimentation 24\,V, contrôle sans fil, boîtier solide.
+    \item Rédaction d'une première liste de questions techniques à résoudre.
+\end{itemize}
+
+\subsection*{Jour 2 -- Recherche sur les microcontrôleurs}
+\begin{itemize}
+    \item Étude comparative entre plusieurs microcontrôleurs : Arduino, STM32, ESP32.
+    \item Choix de l'\textbf{ESP32-WROVER-E} car il a le WiFi et le Bluetooth intégrés, assez de mémoire et beaucoup de broches GPIO.
+    \item Lecture du datasheet de l'ESP32-WROVER-E pour comprendre ses caractéristiques.
+    \item Comparaison avec d'autres options et justification du choix final.
+\end{itemize}
+
+\subsection*{Jour 3 -- Recherche sur la commande des segments LED}
+\begin{itemize}
+    \item Problème identifié : l'ESP32 n'a pas assez de sorties pour commander 42 segments directement.
+    \item Solution trouvée : utiliser des \textbf{registres à décalage 74HC595} en cascade (daisy-chain).
+    \item Calcul du nombre de registres nécessaires : 42 segments $\div$ 8 sorties/registre = 6 registres.
+    \item Compréhension du protocole SPI utilisé pour envoyer les données aux registres.
+\end{itemize}
+
+\subsection*{Jour 4 -- Choix des circuits d'amplification de courant}
+\begin{itemize}
+    \item Les sorties du 74HC595 ne peuvent pas fournir assez de courant pour les LED 24\,V.
+    \item Recherche et sélection des \textbf{ULN2803A} : tableaux de transistors Darlington qui peuvent soutirer jusqu'à 500\,mA par canal.
+    \item Lecture de la fiche technique de l'ULN2803A.
+    \item Calcul du courant total maximal du système : 42 segments × 150\,mA = 6,3\,A.
+\end{itemize}
+
+\subsection*{Jour 5 -- Alimentation et module GSM}
+\begin{itemize}
+    \item Choix de l'alimentation principale : transformateur 230\,V / 24\,V avec filtre redresseur.
+    \item Sélection du convertisseur abaisseur \textbf{LM2596} pour passer de 24\,V à 5\,V (pour l'ESP32 et les circuits logiques).
+    \item Étude du module \textbf{SIM800L} pour la communication GSM (envoi/réception de SMS).
+    \item Identification d'un problème critique : le SIM800L consomme jusqu'à 2\,A en pointe lors des transmissions.
+\end{itemize}
+
+\subsection*{Jour 6 -- Calculs électriques et rédaction du cahier des charges}
+\begin{itemize}
+    \item Calcul du condensateur de filtrage pour le SIM800L : $C_1 = 1000\,\mu\text{F}$.
+    \item Calcul du condensateur d'entrée du LM2596 : $C_2 = 100\,\mu\text{F}$.
+    \item Rédaction du tableau des spécifications techniques du projet (cahier des charges).
+    \item Préparation d'une liste définitive des composants à commander (BOM).
+\end{itemize}
+
+\newpage
+
+% ==============================================================================
+\section{Semaine 2 -- Conception du schéma électrique (Jours 7 à 12)}
+% ==============================================================================
+
+\colorbox{semaine2}{\parbox{\linewidth}{\centering\textbf{Objectif : Dessiner le schéma électrique complet sous KiCad 10}}}
+
+\bigskip
+
+\subsection*{Jour 7 -- Prise en main de KiCad 10}
+\begin{itemize}
+    \item Installation et découverte du logiciel KiCad 10.
+    \item Création d'un nouveau projet : \texttt{CHRONO\_01}.
+    \item Apprentissage de l'interface de l'éditeur de schémas (Schematic Editor).
+    \item Placement des premiers symboles : résistances, condensateurs, connecteurs.
+\end{itemize}
+
+\subsection*{Jour 8 -- Placement des composants principaux}
+\begin{itemize}
+    \item Ajout du symbole de l'ESP32-WROVER-E dans le schéma.
+    \item Placement des 6 registres à décalage 74HC595 et connexion en cascade SPI.
+    \item Placement des 6 réseaux de transistors ULN2803A.
+    \item Connexion des signaux SPI : \texttt{CLK}, \texttt{DATA}, \texttt{LATCH}.
+\end{itemize}
+
+\subsection*{Jour 9 -- Schéma d'alimentation}
+\begin{itemize}
+    \item Dessin du circuit d'alimentation : entrée 24\,V, convertisseur LM2596, sortie 5\,V.
+    \item Ajout des condensateurs de découplage sur chaque circuit intégré.
+    \item Placement du condensateur de tampon $C_1 = 1000\,\mu\text{F}$ pour le SIM800L.
+    \item Ajout de la LED de puissance $D_1$ avec sa résistance de limitation $R_1 = 2{,}4\,\text{k}\Omega$.
+\end{itemize}
+
+\subsection*{Jour 10 -- Module GSM et connecteurs}
+\begin{itemize}
+    \item Ajout du module SIM800L dans le schéma avec ses connexions UART (TX, RX).
+    \item Placement des connecteurs de sortie pour les 6 chiffres (connecteurs JST-XH 8 broches).
+    \item Ajout du connecteur d'entrée principal d'alimentation 24\,V (bornier à vis).
+    \item Création des points de test (TP1, TP2) pour les mesures oscilloscope.
+\end{itemize}
+
+\subsection*{Jour 11 -- Vérification du schéma (ERC)}
+\begin{itemize}
+    \item Lancement de la vérification électrique automatique (ERC -- Electrical Rules Check).
+    \item Correction de toutes les erreurs trouvées : fils non connectés, broches manquantes.
+    \item Ajout des drapeaux \texttt{PWR\_FLAG} sur les rails d'alimentation.
+    \item Vérification que chaque broche de chaque CI est bien connectée ou terminée correctement.
+\end{itemize}
+
+\subsection*{Jour 12 -- Finalisation du schéma et empreintes}
+\begin{itemize}
+    \item Assignation des empreintes (footprints) à chaque composant du schéma.
+    \item Choix des empreintes DIP-16 pour les 74HC595 et DIP-18 pour les ULN2803A.
+    \item Export de la liste des connexions (netlist) vers le routeur PCB.
+    \item Sauvegarde et archivage du projet KiCad.
+\end{itemize}
+
+\newpage
+
+% ==============================================================================
+\section{Semaine 3 -- Routage du PCB et fabrication (Jours 13 à 18)}
+% ==============================================================================
+
+\colorbox{semaine3}{\parbox{\linewidth}{\centering\textbf{Objectif : Dessiner le circuit imprimé (PCB), le faire fabriquer et le souder}}}
+
+\bigskip
+
+\subsection*{Jour 13 -- Découverte de l'éditeur PCB de KiCad}
+\begin{itemize}
+    \item Ouverture de l'éditeur PCB (PCB Editor) dans KiCad 10.
+    \item Import des composants depuis le schéma électrique.
+    \item Définition des dimensions du PCB : premiers essais avec un format 280 × 110\,mm.
+    \item Étude des contraintes de fabrication artisanale (trous non métallisés, NPTH).
+\end{itemize}
+
+\subsection*{Jour 14 -- Placement des composants sur le PCB}
+\begin{itemize}
+    \item Organisation des composants par blocs logiques : un bloc par chiffre.
+    \item Mise au point d'une géométrie modulaire en forme de ``T'' pour chaque chiffre.
+    \item Réduction de la taille totale du PCB à 160 × 80\,mm (gain de 58\,\%).
+    \item Placement des sockets tulipes à broches usinées pour les circuits DIP.
+\end{itemize}
+
+\subsection*{Jour 15 -- Routage des pistes}
+\begin{itemize}
+    \item Routage des pistes d'alimentation (24\,V) avec une largeur de 2\,mm.
+    \item Routage des pistes SPI et de commande avec une largeur de 0,6\,mm.
+    \item Respect des distances minimales entre pistes : $\geq 0{,}38$\,mm.
+    \item Ajout des zones de cuivre (copper pours) sur les deux faces du PCB pour la masse.
+\end{itemize}
+
+\subsection*{Jour 16 -- Vérification DRC et optimisation}
+\begin{itemize}
+    \item Lancement de la vérification des règles de conception (DRC -- Design Rules Check).
+    \item Correction de toutes les violations trouvées (0 erreur obtenue à la fin).
+    \item Ajout des gouttes (teardrops) sur les pastilles pour solidifier les soudures.
+    \item Vérification visuelle de la vue 3D du PCB.
+\end{itemize}
+
+\subsection*{Jour 17 -- Génération des fichiers et envoi à la fabrication}
+\begin{itemize}
+    \item Génération des fichiers Gerber (RS-274X) pour chaque couche du PCB.
+    \item Génération des fichiers de perçage Excellon (.drl).
+    \item Vérification des fichiers avec un viewer Gerber.
+    \item Envoi des fichiers à l'artisan local pour la gravure chimique. Coût : 120\,TND.
+\end{itemize}
+
+\subsection*{Jour 18 -- Réception du PCB et soudure des composants}
+\begin{itemize}
+    \item Réception du PCB fabriqué et vérification visuelle (pas de court-circuit visible).
+    \item Soudure des composants passifs : résistances, condensateurs.
+    \item Installation des sockets tulipes pour les circuits intégrés DIP.
+    \item Soudure des borniers et connecteurs JST.
+\end{itemize}
+
+\newpage
+
+% ==============================================================================
+\section{Semaine 4 -- Programmation du firmware (Jours 19 à 24)}
+% ==============================================================================
+
+\colorbox{semaine4}{\parbox{\linewidth}{\centering\textbf{Objectif : Écrire le programme de l'ESP32 et créer l'interface web}}}
+
+\bigskip
+
+\subsection*{Jour 19 -- Mise en place de l'environnement de développement}
+\begin{itemize}
+    \item Installation de l'IDE Arduino et de la bibliothèque ESP32 (ESP32 Arduino Core).
+    \item Test de connexion entre le PC et la carte ESP32-WROVER-E.
+    \item Premier programme de test : allumer et éteindre tous les segments (test de câblage).
+    \item Vérification que les 42 segments répondent correctement aux commandes.
+\end{itemize}
+
+\subsection*{Jour 20 -- Programmation des registres à décalage (SPI)}
+\begin{itemize}
+    \item Écriture de la fonction qui envoie les données aux 6 registres 74HC595 en cascade via SPI.
+    \item Création d'un tableau de correspondance (look-up table) pour les chiffres 0 à 9.
+    \item Test d'affichage de chaque chiffre sur chacun des 6 digit du chronomètre.
+    \item Vérification visuelle que les bonnes LED s'allument pour chaque chiffre.
+\end{itemize}
+
+\subsection*{Jour 21 -- Logique du chronomètre}
+\begin{itemize}
+    \item Écriture de la logique de comptage : heures, minutes, secondes.
+    \item Gestion des dépassements (59 secondes $\rightarrow$ 0 + 1 minute, etc.).
+    \item Utilisation d'une tâche sur le cœur 1 de l'ESP32 (dual-core) pour le comptage.
+    \item Tests de précision du temps avec un chronomètre de référence.
+\end{itemize}
+
+\subsection*{Jour 22 -- Serveur web WiFi (interface de contrôle)}
+\begin{itemize}
+    \item Configuration de l'ESP32 en mode Point d'Accès WiFi (Soft-AP).
+    \item Création d'un serveur HTTP asynchrone avec la bibliothèque \texttt{ESPAsyncWebServer}.
+    \item Écriture de la page web HTML/CSS/JavaScript embarquée dans le firmware.
+    \item Test de la page web depuis un téléphone connecté au réseau WiFi du chronomètre.
+\end{itemize}
+
+\subsection*{Jour 23 -- Commandes web et ajustement de l'heure}
+\begin{itemize}
+    \item Ajout des boutons sur la page web : Démarrer, Arrêter, Remettre à zéro.
+    \item Ajout d'un formulaire pour régler l'heure manuellement (HH:MM:SS).
+    \item Test de chaque bouton depuis l'interface web sur téléphone et tablette.
+    \item Correction d'un problème d'affichage : les deux-points (:) ne clignotaient pas correctement.
+\end{itemize}
+
+\subsection*{Jour 24 -- Module GSM (SIM800L) et commande par SMS}
+\begin{itemize}
+    \item Câblage du module SIM800L sur le port UART2 de l'ESP32.
+    \item Test des commandes AT de base : \texttt{AT}, \texttt{AT+CSQ} (force du signal), \texttt{AT+CMGF=1} (mode texte SMS).
+    \item Écriture de la fonction qui lit les SMS reçus et détecte les commandes : ``\texttt{START}'', ``\texttt{STOP}'', ``\texttt{RESET}''.
+    \item Test d'envoi d'un SMS depuis un téléphone pour démarrer le chronomètre à distance.
+\end{itemize}
+
+\newpage
+
+% ==============================================================================
+\section{Semaines 5 \& 6 -- Assemblage, tests et documentation (Jours 25 à 30)}
+% ==============================================================================
+
+\colorbox{semaine5}{\parbox{\linewidth}{\centering\textbf{Objectif : Monter le boîtier, tester le système complet et rédiger la documentation}}}
+
+\bigskip
+
+\subsection*{Jour 25 -- Préparation du châssis}
+\begin{itemize}
+    \item Récupération du vieux châssis de chronomètre à LED.
+    \item Découpe et préparation des logements pour les 42 barres LED COB 24\,V.
+    \item Organisation de la disposition des segments dans le châssis (segments a, b, c, d, e, f, g).
+    \item Passage des fils à l'arrière du châssis pour garder la face avant propre.
+\end{itemize}
+
+\subsection*{Jour 26 -- Installation des rubans LED}
+\begin{itemize}
+    \item Découpe des rubans LED COB en barres de 12\,cm.
+    \item Soudure directe des fils positif (+) et négatif (--) sur chaque barre LED.
+    \item Méthode ``bouquet'' : regroupement des 7 fils rouges de chaque chiffre en un seul fil commun.
+    \item Test de chaque segment individuellement avant la fermeture du boîtier.
+\end{itemize}
+
+\subsection*{Jour 27 -- Installation du diffuseur optique}
+\begin{itemize}
+    \item Découpe d'un panneau en PMMA opaque blanc de 3\,mm d'épaisseur.
+    \item Fixation du panneau PMMA sur la face avant du boîtier.
+    \item Vérification que les segments sont bien visibles à travers le diffuseur.
+    \item Réglage de la distance entre les LED et le diffuseur pour éviter les points lumineux.
+\end{itemize}
+
+\subsection*{Jour 28 -- Tests électriques et mesures}
+\begin{itemize}
+    \item Connexion du PCB au châssis et à l'alimentation 24\,V.
+    \item Mesure de la tension et du courant total avec un multimètre.
+    \item Test du condensateur $C_1$ avec un oscilloscope : vérification que la tension ne chute pas de plus de 80\,mV lors des transmissions GSM.
+    \item Vérification thermique des ULN2803A après 30 minutes de fonctionnement continu.
+\end{itemize}
+
+\subsection*{Jour 29 -- Tests du système complet}
+\begin{itemize}
+    \item Test complet du chronomètre : démarrage, arrêt, remise à zéro depuis l'interface web.
+    \item Test de la commande par SMS depuis un téléphone à distance.
+    \item Vérification de la lisibilité de l'affichage en pleine lumière et à plus de 20 mètres.
+    \item Correction des derniers problèmes logiciels (retard d'affichage, réponse web lente).
+\end{itemize}
+
+\subsection*{Jour 30 -- Rédaction de la documentation et clôture du stage}
+\begin{itemize}
+    \item Rédaction du rapport de stage complet sous \LaTeX{} (avec schémas, tableaux, calculs).
+    \item Mise en ligne du projet sur GitHub (\texttt{github.com/becem0}) avec tous les fichiers sources.
+    \item Rédaction de ce journal de stage.
+    \item Bilan personnel : compétences acquises, difficultés rencontrées, points à améliorer.
+\end{itemize}
+
+\newpage
+
+% ==============================================================================
+\section*{Bilan du stage}
+\addcontentsline{toc}{section}{Bilan du stage}
+% ==============================================================================
+
+\subsection*{Compétences acquises}
+\begin{itemize}
+    \item Maîtrise du logiciel de conception de PCB \textbf{KiCad 10}.
+    \item Calcul et dimensionnement de circuits électroniques de puissance (alimentation, filtres, transistors).
+    \item Programmation d'un microcontrôleur \textbf{ESP32} en langage C++ (Arduino).
+    \item Création d'un serveur web embarqué et d'une interface HTML/CSS/JavaScript.
+    \item Utilisation des commandes AT pour contrôler un module GSM.
+    \item Travail pratique : soudure, câblage, montage mécanique.
+\end{itemize}
+
+\subsection*{Difficultés rencontrées}
+\begin{itemize}
+    \item Gestion des pics de courant du module SIM800L (problème de brownout réglé avec $C_1$).
+    \item Contraintes de fabrication artisanale du PCB (trous non métallisés, NPTH) qui ont nécessité une adaptation du design avec des sockets usinées.
+    \item Problèmes de boot de la carte ESP32 clone (watchdog reset) -- nécessite une carte de meilleure qualité.
+    \item Organisation du câblage à l'arrière du châssis avec 42 × 2 fils = 84 fils au total.
+\end{itemize}
+
+\subsection*{Conclusion personnelle}
+Ce stage m'a permis de réaliser un projet complet de A à Z, depuis l'étude théorique jusqu'à la fabrication et les tests. J'ai appris à travailler de façon méthodique, à résoudre des problèmes techniques réels et à documenter mon travail de manière professionnelle. Ce projet m'a donné confiance en mes capacités à mener un projet d'ingénierie de bout en bout.
+
+\bigskip
+\begin{center}
+\rule{0.4\linewidth}{0.4pt}\\[0.3cm]
+{\small Becem Ameur -- ENIM, Monastir, Tunisie -- 2026}
+\end{center}
+
+\end{document}
